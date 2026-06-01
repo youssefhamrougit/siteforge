@@ -6,15 +6,52 @@
     <title>siteforge</title>
 </head>
 <body>
+    <style>
+
+* { box-sizing : border*box; margin : 0; padding 0; }
+body { font-family : var(--font-sans); }
+#app { display : flex; flex-direction: column; height:600px; background: var(--color-background-primary); border:0.5px solid var(--color-border-tertiary);border-radius: var(--border-radius-lg); overflow: hidden; }
+  #toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); flex-shrink: 0; }
+
+  
+
+    </style>
+
+
+
 <h2> SiteForge — AI-powered website builder. Type a description and Claude generates a live website preview.</h2>
 
+<div id="main"> 
+    <div id="left"> 
+        <div id="prompt-area"> 
+            <textarea id="prompt" placeholder="Describe your website ...&#10;&#10;e.g. A portfolio for a photographer named Sara with a dark elegant theme and a gallery section">  </textarea> </div>
+        <div id ="error-msg"> </div>
+        <div id="bottom-bar"> </div>
+        <button id="generate-btn" onclick="generate()"> </button>
+        <i class="ti ti-download" aria-hidden="true"> generate </i> 
+    </div> 
+</div>
 
+<div> 
+<div id="right">
+    <div id="preview-bar">
+    <div class="dot dot-red"> </div>
+    <div class="dot dot-yellow"> </div> 
+    <div class="dot dot-green"> </div>
+    <span id="preview-label"> preview </span>
+    </div>
+        <div id="empty-state"> 
+            <i class="ti ti-browser" aria-hidden="true"></i>
+            <span> Your website preview will appear here </span>
+            <div class="spinner"> </div>
+            <div id="loading-text"> building your website... </div>
+        </div>
+        <iframe id="preview-frame" style="display:none;" sandbox="allow-scripts">  </iframe>
+        </div>
+    </div>  
+</div>
 
 
 
 </body>
 </html>
-<div id="main"> 
-    
-
-</div>
