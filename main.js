@@ -114,16 +114,27 @@ STRICT RULES:
       // ── PASTE YOUR GEMINI API KEY FROM aistudio.google.com BELOW ──
       const GEMINI_API_KEY = 'AQ.Ab8RN6JhRZyEv-uIisoNIUiv9tvXe4yJCoRjmXxg8jvsGGC_XQ';
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: systemPrompt + '\n\n' + fullPrompt }] }]
-          })
-        }
-      );
+const response = await fetch(
+  'https://anthropic.com', 
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': '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', 
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-3-5-sonnet-latest',
+      max_tokens: 1024,
+      system: systemPrompt, 
+      messages: [
+        { role: 'user', content: fullPrompt }
+      ]
+    })
+  }
+);
+
 
       const data = await response.json();
       clearInterval(msgInterval);
