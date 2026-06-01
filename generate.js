@@ -61,5 +61,4 @@ STRICT RULES:
     return res.status(500).json({ error: 'Request to Anthropic failed. Try again.' });
   }
 }
-                                                          
-  
+               
