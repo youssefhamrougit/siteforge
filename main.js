@@ -1,5 +1,6 @@
  let currentHTML = '';
   let currentMode = 'create';
+  const ANTHROPIC_API_KEY = 'YOUR_API_KEY_HERE';
 
   const templates = {
     portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a bold tagline, a projects grid with 3 case study cards (each with a color gradient thumbnail), an about section with skills listed, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent. Add smooth scroll and hover lift effects on cards.",
@@ -111,31 +112,21 @@ STRICT RULES:
       : `Modify the existing website as follows: ${promptVal}\n\nCurrent HTML:\n${currentHTML}\n\nKeep everything else the same. Return the full updated HTML.`;
 
     try {
-      // ── PASTE YOUR GEMINI API KEY FROM aistudio.google.com BELOW ──
-      const GEMINI_API_KEY = 'AQ.Ab8RN6JhRZyEv-uIisoNIUiv9tvXe4yJCoRjmXxg8jvsGGC_XQ';
-
-const response = await fetch(
-  'https://anthropic.com', 
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': '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', 
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-3-5-sonnet-latest',
-      max_tokens: 1024,
-      system: systemPrompt, 
-      messages: [
-        { role: 'user', content: fullPrompt }
-      ]
-    })
-  }
-);
-
-
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "process.env.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",
+    "anthropic-version": "2023-06-01"
+  },
+  body: JSON.stringify({
+    model: "claude-3-5-sonnet-latest",
+    max_tokens: 1024,
+    messages: [
+      { role: "user", content: fullPrompt }
+    ]
+  })
+});
       const data = await response.json();
       clearInterval(msgInterval);
       endProgress();
