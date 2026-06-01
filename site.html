@@ -552,7 +552,6 @@ STRICT RULES:
         : `Modify the existing website as follows: ${promptVal}\n\nCurrent HTML:\n${currentHTML}\n\nKeep everything else the same. Return the full updated HTML.`;
 
       try {
-        // ─── REPLACE YOUR_GEMINI_API_KEY_HERE with your key from aistudio.google.com ───
         const GEMINI_API_KEY = 'AQ.Ab8RN6JhRZyEv-uIisoNIUiv9tvXe4yJCoRjmXxg8jvsGGC_XQ';
 
         const response = await fetch(
@@ -579,7 +578,7 @@ STRICT RULES:
         }
 
         let html = data.candidates[0].content.parts[0].text;
-        // Strip markdown code fences if Gemini wraps the output
+       
         html = html.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
         currentHTML = html;
 
