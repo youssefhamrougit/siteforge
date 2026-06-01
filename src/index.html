@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SiteForge — AI Website Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <script src="main.js"></script>
+</body>
+</html>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div id="shell">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <a class="brand" href="#">
+      <div class="brand-mark">⚡</div>
+      <div class="brand-name">Site<span>Forge</span></div>
+    </a>
+    <div class="topbar-divider"></div>
+    <div class="model-pill">
+      <div class="model-dot"></div>
+      gemini-2.0-flash
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="tpl-group">
+      <span class="tpl-label">Quick start</span>
+      <button class="tpl-chip" onclick="useTemplate('portfolio',event)">Portfolio</button>
+      <button class="tpl-chip" onclick="useTemplate('landing',event)">SaaS</button>
+      <button class="tpl-chip" onclick="useTemplate('restaurant',event)">Restaurant</button>
+      <button class="tpl-chip" onclick="useTemplate('blog',event)">Blog</button>
+      <button class="tpl-chip" onclick="useTemplate('ecommerce',event)">Shop</button>
+    </div>
+  </header>
+
+  <!-- LEFT PANEL -->
+  <aside id="panel">
+    <div id="tabs">
+      <button class="tab active" id="tab-create" onclick="setMode('create')">✦ Create</button>
+      <button class="tab" id="tab-refine" onclick="setMode('refine')">↺ Refine</button>
+    </div>
+
+    <div id="prompt-wrap">
+      <div class="prompt-label">Describe your website</div>
+      <textarea
+        id="prompt"
+        maxlength="1200"
+        oninput="updateCounter()"
+        placeholder="A dark brutalist portfolio for a graphic designer named Kai. Bold typography, asymmetric grid, hover glitch effects, projects in a masonry layout, monochrome palette with a single blood-orange accent…"
+      ></textarea>
+
+      <div class="prompt-meta">
+        <div id="char-counter">0 / 1200</div>
+        <div class="kbd-hint">
+          <span class="kbd">⌘</span><span class="kbd">↵</span> generate
+        </div>
+      </div>
+
+      <div id="refine-hint">
+        <strong>Refine mode —</strong> describe what to change.<br>
+        e.g. "Make the hero full-screen" · "Switch to a light theme"
+      </div>
+      <div id="error-msg"></div>
+    </div>
+
+    <div id="actions">
+      <button id="generate-btn" onclick="generate()">
+        <span class="btn-spark">✦</span>
+        <span id="btn-label">Generate</span>
+      </button>
+      <button class="tool-btn" id="copy-code-btn" onclick="copyCode()" disabled data-tip="Copy HTML">⎘</button>
+      <button class="tool-btn" id="dl-btn" onclick="downloadHTML()" disabled data-tip="Download">↓</button>
+    </div>
+  </aside>
+
+  <!-- PREVIEW PANE -->
+  <main id="preview">
+    <div id="preview-topbar">
+      <div class="win-btn win-red"></div>
+      <div class="win-btn win-yellow"></div>
+      <div class="win-btn win-green"></div>
+      <div id="url-bar">
+        <span class="url-lock">🔒</span>
+        <span id="url-text">about:blank</span>
+      </div>
+      <button id="copy-html-btn" onclick="copyCode()" disabled>Copy HTML</button>
+    </div>
+
+    <div id="progress"></div>
+
+    <div id="empty">
+      <div class="empty-visual">🖥️</div>
+      <div class="empty-title">Nothing here yet</div>
+      <div class="empty-sub">Describe your website on the left and hit Generate — or pick a template above.</div>
+      <div class="empty-arrow">← start typing</div>
+    </div>
+
+    <div id="loading">
+      <div class="spinner-ring">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="18" stroke="#1a1a35" stroke-width="3"/>
+          <path d="M22 4a18 18 0 0 1 18 18" stroke="url(#sg)" stroke-width="3" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="sg" x1="22" y1="4" x2="40" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4f8ef7"/>
+              <stop offset="0.5" stop-color="#22d4e8"/>
+              <stop offset="1" stop-color="#9b6dff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div id="load-msg">Building your website<span class="load-dots"><span class="load-dot"></span><span class="load-dot"></span><span class="load-dot"></span></span></div>
+      <div id="load-sub">Usually 10–20 seconds with Gemini</div>
+    </div>
+
+    <iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe>
+  </main>
+
+</div>
+
+  </body>
