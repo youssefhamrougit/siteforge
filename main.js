@@ -1,6 +1,6 @@
  let currentHTML = '';
   let currentMode = 'create';
-  const ANTHROPIC_API_KEY = 'YOUR_API_KEY_HERE';
+  const ANTHROPIC_API_KEY = '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';
 
   const templates = {
     portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a bold tagline, a projects grid with 3 case study cards (each with a color gradient thumbnail), an about section with skills listed, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent. Add smooth scroll and hover lift effects on cards.",
