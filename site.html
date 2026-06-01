@@ -1,131 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>siteforge</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SiteForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #0f0f0f; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+
+    h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 4px; letter-spacing: -0.3px; }
+    .subtitle { font-size: 13px; color: #666; margin-bottom: 16px; }
+
+    #app { display: flex; flex-direction: column; width: 100%; max-width: 1000px; height: 620px; background: #161616; border: 0.5px solid #2a2a2a; border-radius: 14px; overflow: hidden; }
+
+    /* Toolbar */
+    #toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid #2a2a2a; background: #1a1a1a; flex-shrink: 0; flex-wrap: wrap; }
+    #toolbar-title { font-size: 12px; font-weight: 500; color: #888; margin-right: 4px; white-space: nowrap; }
+    .template-btn { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid #333; background: #1f1f1f; color: #aaa; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .template-btn:hover { background: #2a3a5c; color: #7aadff; border-color: transparent; }
+
+    /* Main split */
+    #main { display: flex; flex: 1; overflow: hidden; }
+
+    /* Left panel */
+    #left { display: flex; flex-direction: column; width: 300px; flex-shrink: 0; border-right: 0.5px solid #2a2a2a; }
+    #prompt-area { flex: 1; padding: 12px; overflow: hidden; }
+    #prompt { width: 100%; height: 100%; resize: none; border: 0.5px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; font-size: 13px; font-family: inherit; color: #e8e8e8; background: #111; line-height: 1.6; outline: none; }
+    #prompt:focus { border-color: #3a6adf; }
+    #prompt::placeholder { color: #444; }
+
+    #error-msg { font-size: 12px; color: #f87171; padding: 0 12px 6px; display: none; }
+
+    #bottom-bar { padding: 10px 12px; border-top: 0.5px solid #2a2a2a; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    #generate-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #e8e8e8; color: #111; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; font-family: inherit; }
+    #generate-btn:hover { opacity: 0.85; }
+    #generate-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    #download-btn { padding: 8px 12px; border-radius: 8px; border: 0.5px solid #333; background: transparent; color: #aaa; cursor: pointer; font-size: 13px; font-family: inherit; transition: all 0.15s; }
+    #download-btn:hover { background: #222; }
+    #download-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Right panel */
+    #right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    #preview-bar { padding: 8px 14px; border-bottom: 0.5px solid #2a2a2a; display: flex; align-items: center; gap: 6px; background: #1a1a1a; flex-shrink: 0; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+    #preview-label { font-size: 12px; color: #555; margin-left: 6px; }
+
+    #empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #444; font-size: 13px; }
+    #empty-state svg { opacity: 0.2; }
+
+    #loading-overlay { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .spinner { width: 22px; height: 22px; border: 2px solid #333; border-top-color: #e8e8e8; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-text { font-size: 13px; color: #777; }
+
+    #preview-frame { flex: 1; border: none; width: 100%; background: white; display: none; }
+  </style>
 </head>
 <body>
-    <style>
 
-* { box-sizing : border-box; margin:0; padding: 0; }
-body { font-family : var(--font-sans); }
-#app { display : flex; flex-direction: column; height:600px; background: var(--color-background-primary); border:0.5px solid var(--color-border-tertiary);border-radius: var(--border-radius-lg); overflow: hidden; }
-#toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); flex-shrink: 0; }
-#toolbar-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-right: 4px; }
-  .template-btn { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .template-btn:hover { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
-  #main { display: flex; flex: 1; overflow: hidden; }
-  #left { display: flex; flex-direction: column; width: 300px; flex-shrink: 0; border-right: 0.5px solid var(--color-border-tertiary); }
-  #prompt-area { flex: 1; padding: 12px; }
-  #prompt { width: 100%; height: 100%; resize: none; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); line-height: 1.5; outline: none; }
-  #prompt:focus { border-color: var(--color-border-info); }
-  #bottom-bar { padding: 10px 12px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-  #generate-btn { flex: 1; padding: 8px; border-radius: var(--border-radius-md); border: none; background: var(--color-text-primary); color: var(--color-background-primary); font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-  #generate-btn:hover { opacity: 0.85; }
-  #generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  #download-btn { padding: 8px 10px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; font-size: 13px; transition: all 0.15s; }
-  #download-btn:hover { background: var(--color-background-secondary); }
-  #download-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  #right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  #preview-bar { padding: 8px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); flex-shrink: 0; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-red { background: #ff5f57; }
-  .dot-yellow { background: #febc2e; }
-  .dot-green { background: #28c840; }
-  #preview-label { font-size: 12px; color: var(--color-text-secondary); margin-left: 4px; }
-  #preview-frame { flex: 1; border: none; width: 100%; background: white; }
-  #empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-text-tertiary); font-size: 13px; }
-  #empty-state i { font-size: 32px; opacity: 0.3; }
-  #loading-overlay { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-  .spinner { width: 24px; height: 24px; border: 2px solid var(--color-border-tertiary); border-top-color: var(--color-text-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  #loading-text { font-size: 13px; color: var(--color-text-secondary); }
-  #error-msg { font-size: 12px; color: var(--color-text-danger); padding: 6px 12px; display: none; }
+  <h1>SiteForge</h1>
+  <p class="subtitle">AI-powered website builder — describe a site and get a live preview instantly.</p>
 
-  
-
-    </style>
-
-
-
-<h2> SiteForge — AI-powered website builder. Type a description and Claude generates a live website preview.</h2>
-
-<div id="main"> 
-    <div id="left"> 
-        <div id="prompt-area"> 
-            <textarea id="prompt" placeholder="Describe your website ...&#10;&#10;e.g. A portfolio for a photographer named Sara with a dark elegant theme and a gallery section">  </textarea> </div>
-        <div id ="error-msg"> </div>
-        <div id="bottom-bar"> </div>
-        <button id="generate-btn" onclick="generate()"> </button>
-        <i class="ti ti-download" aria-hidden="true"> generate </i> 
-    </div> 
-</div>
-
-<div> 
-<div id="right">
-    <div id="preview-bar">
-    <div class="dot dot-red"> </div>
-    <div class="dot dot-yellow"> </div> 
-    <div class="dot dot-green"> </div>
-    <span id="preview-label"> preview </span>
+  <div id="app">
+    <!-- Toolbar -->
+    <div id="toolbar">
+      <span id="toolbar-title">Templates:</span>
+      <button class="template-btn" onclick="useTemplate('portfolio')">Portfolio</button>
+      <button class="template-btn" onclick="useTemplate('landing')">SaaS Landing</button>
+      <button class="template-btn" onclick="useTemplate('restaurant')">Restaurant</button>
+      <button class="template-btn" onclick="useTemplate('blog')">Blog</button>
     </div>
-        <div id="empty-state"> 
-            <i class="ti ti-browser" aria-hidden="true"></i>
-            <span> Your website preview will appear here </span>
-            <div class="spinner"> </div>
-            <div id="loading-text"> building your website... </div>
+
+    <!-- Main area -->
+    <div id="main">
+      <!-- Left: prompt -->
+      <div id="left">
+        <div id="prompt-area">
+          <textarea id="prompt" placeholder="Describe your website…&#10;&#10;e.g. A portfolio for a photographer named Sara with a dark elegant theme and a gallery section"></textarea>
         </div>
-        <iframe id="preview-frame" style="display:none;" sandbox="allow-scripts">  </iframe>
+        <div id="error-msg"></div>
+        <div id="bottom-bar">
+          <button id="generate-btn" onclick="generate()">✦ Generate</button>
+          <button id="download-btn" onclick="download()" disabled>↓</button>
         </div>
-    </div>  
-</div>
+      </div>
 
-<script>
+      <!-- Right: preview -->
+      <div id="right">
+        <div id="preview-bar">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span id="preview-label">preview</span>
+        </div>
 
-let currentHTML = '';
-let conversationhistory=[];
-const templates = {
-  portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a tagline, a projects grid with 3 case study cards, an about section, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent color.",
-  landing: "A SaaS landing page for a tool called 'Flowmate' that helps teams manage projects. Include a hero with a headline and CTA button, a 3-feature section with icons, a pricing table with 2 tiers (Free and Pro), and a footer. Use a modern dark navy theme with purple accents.",
-  restaurant: "A restaurant website for 'Casa Bella', an Italian fine dining restaurant in Paris. Include a full-width hero image (use a gradient placeholder), a menu section with 3 categories (Antipasti, Pasta, Dolci), a reservation form, and an elegant footer. Use warm cream and terracotta colors.",
-  blog: "A personal blog for a travel writer named Maya. Include a hero with a large headline, a 4-post grid with thumbnail placeholders (colored divs), a sidebar with categories and recent posts, and a newsletter signup. Use a warm editorial aesthetic with serif fonts."
-};
+        <div id="empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+          </svg>
+          <span>Your website preview will appear here</span>
+        </div>
 
-function useTemplate(name) {
-  document.getElementById('prompt').value = templates[name];
-}
+        <div id="loading-overlay">
+          <div class="spinner"></div>
+          <div id="loading-text">Building your website…</div>
+        </div>
 
-function showError(msg) {
-  const el = document.getElementById('error-msg');
-  el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 5000);
-}
+        <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+    </div>
+  </div>
 
-async function generate() {
-  const promptVal = document.getElementById('prompt').value.trim();
-  if (!promptVal) return;
+  <script>
+    let currentHTML = '';
+    let conversationHistory = [];
 
-  const btn = document.getElementById('generate-btn');
-  const emptyState = document.getElementById('empty-state');
-  const loadingOverlay = document.getElementById('loading-overlay');
-  const frame = document.getElementById('preview-frame');
+    const templates = {
+      portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a tagline, a projects grid with 3 case study cards, an about section, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent color.",
+      landing: "A SaaS landing page for a tool called 'Flowmate' that helps teams manage projects. Include a hero with a headline and CTA button, a 3-feature section with icons, a pricing table with 2 tiers (Free and Pro), and a footer. Use a modern dark navy theme with purple accents.",
+      restaurant: "A restaurant website for 'Casa Bella', an Italian fine dining restaurant in Paris. Include a full-width hero image (use a gradient placeholder), a menu section with 3 categories (Antipasti, Pasta, Dolci), a reservation form, and an elegant footer. Use warm cream and terracotta colors.",
+      blog: "A personal blog for a travel writer named Maya. Include a hero with a large headline, a 4-post grid with thumbnail placeholders (colored divs), a sidebar with categories and recent posts, and a newsletter signup. Use a warm editorial aesthetic with serif fonts."
+    };
 
-  btn.disabled = true;
-  emptyState.style.display = 'none';
-  frame.style.display = 'none';
-  loadingOverlay.style.display = 'flex';
-  document.getElementById('error-msg').style.display = 'none';
+    function useTemplate(name) {
+      document.getElementById('prompt').value = templates[name];
+      document.getElementById('prompt').focus();
+    }
 
-  const loadingMessages = ['Building your website...', 'Writing HTML & CSS...', 'Adding finishing touches...', 'Almost ready...'];
-  let msgIdx = 0;
-  const msgInterval = setInterval(() => {
-    msgIdx = (msgIdx + 1) % loadingMessages.length;
-    document.getElementById('loading-text').textContent = loadingMessages[msgIdx];
-  }, 2000);
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
 
-  const systemPrompt = `You are an expert web developer. When given a website description, you generate a complete, beautiful, single-file HTML website.
+    async function generate() {
+      const promptVal = document.getElementById('prompt').value.trim();
+      if (!promptVal) return;
+
+      const btn = document.getElementById('generate-btn');
+      const emptyState = document.getElementById('empty-state');
+      const loadingOverlay = document.getElementById('loading-overlay');
+      const frame = document.getElementById('preview-frame');
+
+      btn.disabled = true;
+      emptyState.style.display = 'none';
+      frame.style.display = 'none';
+      loadingOverlay.style.display = 'flex';
+      document.getElementById('error-msg').style.display = 'none';
+
+      const loadingMessages = ['Building your website…', 'Writing HTML & CSS…', 'Adding finishing touches…', 'Almost ready…'];
+      let msgIdx = 0;
+      const msgInterval = setInterval(() => {
+        msgIdx = (msgIdx + 1) % loadingMessages.length;
+        document.getElementById('loading-text').textContent = loadingMessages[msgIdx];
+      }, 2000);
+
+      const systemPrompt = `You are an expert web developer. When given a website description, you generate a complete, beautiful, single-file HTML website.
 
 RULES:
 - Return ONLY raw HTML. No markdown, no backticks, no explanation. Start with <!DOCTYPE html>.
@@ -138,70 +174,66 @@ RULES:
 - Include hover effects, smooth transitions, and polished UI details.
 - Content should feel real and populated, not generic lorem ipsum.`;
 
-  conversationHistory.push({ role: 'user', content: promptVal });
+      conversationHistory.push({ role: 'user', content: promptVal });
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 4000,
-        system: systemPrompt,
-        messages: conversationHistory
-      })
-    });
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 4000,
+            system: systemPrompt,
+            messages: conversationHistory
+          })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (data.error) {
-      showError(data.error.message || 'API error. Check your API key.');
-      loadingOverlay.style.display = 'none';
-      emptyState.style.display = 'flex';
+        if (data.error) {
+          showError(data.error.message || 'API error.');
+          loadingOverlay.style.display = 'none';
+          emptyState.style.display = 'flex';
+          btn.disabled = false;
+          clearInterval(msgInterval);
+          return;
+        }
+
+        const html = data.content.map(b => b.text || '').join('');
+        conversationHistory.push({ role: 'assistant', content: html });
+        currentHTML = html;
+
+        clearInterval(msgInterval);
+        loadingOverlay.style.display = 'none';
+        frame.style.display = 'block';
+        frame.srcdoc = html;
+        document.getElementById('download-btn').disabled = false;
+        document.getElementById('preview-label').textContent = 'live preview';
+
+      } catch (err) {
+        clearInterval(msgInterval);
+        showError('Request failed. Try again.');
+        loadingOverlay.style.display = 'none';
+        emptyState.style.display = 'flex';
+      }
+
       btn.disabled = false;
-      clearInterval(msgInterval);
-      return;
     }
 
-    const html = data.content.map(b => b.text || '').join('');
-    conversationHistory.push({ role: 'assistant', content: html });
-    currentHTML = html;
+    function download() {
+      if (!currentHTML) return;
+      const blob = new Blob([currentHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'website.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
 
-    clearInterval(msgInterval);
-    loadingOverlay.style.display = 'none';
-    frame.style.display = 'block';
-    frame.srcdoc = html;
-    document.getElementById('download-btn').disabled = false;
-    document.getElementById('preview-label').textContent = 'live preview';
-
-  } catch (err) {
-    clearInterval(msgInterval);
-    showError('Request failed. Try again.');
-    loadingOverlay.style.display = 'none';
-    emptyState.style.display = 'flex';
-  }
-
-  btn.disabled = false;
-}
-
-function download() {
-  if (!currentHTML) return;
-  const blob = new Blob([currentHTML], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'website.html';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-document.getElementById('prompt').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
-});
-</script>
-
-
-</script>
-
+    document.getElementById('prompt').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
+    });
+  </script>
 </body>
 </html>
