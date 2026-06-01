@@ -230,7 +230,8 @@
     #generate-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
     #generate-btn .btn-icon { font-size: 15px; }
 
-    .icon-btn {
+    .icon-btn { 
+      position: relative;
       padding: 8px 10px;
       border-radius: 8px;
       border: 0.5px solid var(--border2);
@@ -364,11 +365,11 @@
     <!-- Toolbar -->
     <div id="toolbar">
       <span class="toolbar-label">Templates</span>
-      <button class="tpl-btn" onclick="useTemplate('portfolio')">🎨 Portfolio</button>
-      <button class="tpl-btn" onclick="useTemplate('landing')">🚀 SaaS Landing</button>
-      <button class="tpl-btn" onclick="useTemplate('restaurant')">🍝 Restaurant</button>
-      <button class="tpl-btn" onclick="useTemplate('blog')">✍️ Blog</button>
-      <button class="tpl-btn" onclick="useTemplate('ecommerce')">🛍️ E-commerce</button>
+      <button class="tpl-btn" onclick="useTemplate('portfolio' , event)">🎨 Portfolio</button>
+      <button class="tpl-btn" onclick="useTemplate('landing' , event)">🚀 SaaS Landing</button>
+      <button class="tpl-btn" onclick="useTemplate('restaurant' , event)">🍝 Restaurant</button>
+      <button class="tpl-btn" onclick="useTemplate('blog' , event)">✍️ Blog</button>
+      <button class="tpl-btn" onclick="useTemplate('ecommerce' , event)">🛍️ E-commerce</button>
       <div class="toolbar-spacer"></div>
       <div class="kbd-hint"><span class="kbd">⌘</span><span class="kbd">↵</span> to generate</div>
     </div>
@@ -448,7 +449,7 @@
       ecommerce: "A fashion e-commerce store called 'Lumière' for minimalist luxury clothing. Include a full-width hero banner, a 6-product grid with hover zoom and quick-add buttons, a featured collection strip, and a newsletter bar. Each product should have a gradient placeholder image, name, and price. Use a stark white and charcoal palette with gold accents, very editorial."
     };
 
-    function useTemplate(name) {
+    function useTemplate(name , event) {
       document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
       activeTemplate = name;
