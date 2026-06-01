@@ -3,538 +3,725 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SiteForge</title>
+  <title>SiteForge — AI Website Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a0a;
-      --surface: #111;
-      --surface2: #161616;
-      --surface3: #1c1c1c;
-      --border: #222;
-      --border2: #2a2a2a;
-      --text: #e8e8e8;
-      --text2: #888;
-      --text3: #444;
-      --accent: #7c6dfa;
-      --accent2: #a89cf7;
-      --danger: #f87171;
-      --glow: rgba(124, 109, 250, 0.15);
+      --bg: #080810;
+      --bg2: #0d0d1a;
+      --surface: #10101f;
+      --surface2: #14142a;
+      --surface3: #1a1a35;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.10);
+      --text: #f0f0f8;
+      --text2: #8888aa;
+      --text3: #44445a;
+      --blue: #4f8ef7;
+      --blue2: #7ab0ff;
+      --indigo: #6d5ce8;
+      --violet: #9b6dff;
+      --cyan: #22d4e8;
+      --glow-blue: rgba(79,142,247,0.18);
+      --glow-violet: rgba(155,109,255,0.14);
+      --danger: #ff6b7a;
+      --success: #34d399;
+      --grid-color: rgba(79,142,247,0.04);
     }
+
+    html, body { height: 100%; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       background: var(--bg);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px 24px 24px;
-      /* subtle grid bg */
-      background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* ── Header ─────────────────────────────── */
-    #header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .logo-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-icon {
-      width: 34px; height: 34px;
-      background: linear-gradient(135deg, var(--accent), #c084fc);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 0 20px var(--glow);
-    }
-    .logo-text {
-      font-family: 'Instrument Serif', serif;
-      font-size: 26px;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-    .logo-text em { font-style: italic; color: var(--accent2); }
-    .tagline {
-      font-size: 13px;
-      color: var(--text2);
-      max-width: 340px;
-      line-height: 1.5;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      color: var(--accent2);
-      background: rgba(124,109,250,0.1);
-      border: 0.5px solid rgba(124,109,250,0.25);
-      border-radius: 20px;
-      padding: 3px 9px;
-    }
-    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-    /* ── App shell ──────────────────────────── */
-    #app {
-      width: 100%;
-      max-width: 1060px;
-      height: 620px;
-      background: var(--surface);
-      border: 0.5px solid var(--border2);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.6);
-    }
-
-    /* ── Toolbar ────────────────────────────── */
-    #toolbar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 14px;
-      border-bottom: 0.5px solid var(--border2);
-      background: var(--surface2);
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
-    .toolbar-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-right: 2px;
-      white-space: nowrap;
-    }
-    .tpl-btn {
-      font-size: 12px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      border: 0.5px solid var(--border2);
-      background: var(--surface3);
-      color: var(--text2);
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-    .tpl-btn:hover { background: rgba(124,109,250,0.12); color: var(--accent2); border-color: rgba(124,109,250,0.3); }
-    .tpl-btn.active { background: rgba(124,109,250,0.18); color: var(--accent2); border-color: rgba(124,109,250,0.4); }
-
-    .toolbar-spacer { flex: 1; }
-    .kbd-hint { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
-    .kbd { background: var(--surface3); border: 0.5px solid var(--border2); border-radius: 4px; padding: 1px 5px; font-size: 11px; color: var(--text2); }
-
-    /* ── Main split ─────────────────────────── */
-    #main { display: flex; flex: 1; overflow: hidden; }
-
-    /* ── Left panel ─────────────────────────── */
-    #left { display: flex; flex-direction: column; width: 300px; flex-shrink: 0; border-right: 0.5px solid var(--border2); }
-
-    #mode-bar {
-      display: flex;
-      border-bottom: 0.5px solid var(--border2);
-      background: var(--surface2);
-      flex-shrink: 0;
-    }
-    .mode-btn {
-      flex: 1;
-      padding: 7px 0;
-      font-size: 12px;
-      font-family: inherit;
-      font-weight: 500;
-      border: none;
-      background: transparent;
-      color: var(--text3);
-      cursor: pointer;
-      transition: all 0.15s;
-      border-bottom: 2px solid transparent;
-    }
-    .mode-btn.active { color: var(--accent2); border-bottom-color: var(--accent); background: rgba(124,109,250,0.05); }
-    .mode-btn:hover:not(.active) { color: var(--text2); }
-
-    #prompt-area { flex: 1; padding: 12px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
-    #prompt {
-      flex: 1;
-      width: 100%;
-      resize: none;
-      border: 0.5px solid var(--border2);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-family: inherit;
       color: var(--text);
-      background: var(--bg);
-      line-height: 1.6;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      overflow: hidden;
+      position: relative;
     }
-    #prompt:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); }
-    #prompt::placeholder { color: var(--text3); }
 
-    #char-counter { font-size: 11px; color: var(--text3); text-align: right; }
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+      animation: gridDrift 30s linear infinite;
+    }
+    @keyframes gridDrift {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
+    }
+
+    /* Ambient orbs */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(80px); pointer-events: none; z-index: 0;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
+      top: -150px; left: -150px;
+      animation: orbFloat1 20s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(155,109,255,0.10) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+      animation: orbFloat2 25s ease-in-out infinite;
+    }
+    @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+    @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-40px)} }
+
+    /* ─── LAYOUT ─── */
+    #shell {
+      position: relative; z-index: 1;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 52px 1fr;
+      grid-template-columns: 340px 1fr;
+      grid-template-areas:
+        "topbar topbar"
+        "panel  preview";
+    }
+
+    /* ─── TOPBAR ─── */
+    #topbar {
+      grid-area: topbar;
+      display: flex; align-items: center; gap: 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,16,0.8);
+      backdrop-filter: blur(20px);
+      padding: 0 18px;
+      position: relative;
+    }
+    #topbar::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue) 30%, var(--violet) 70%, transparent);
+      opacity: 0.4;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; margin-right: 28px;
+    }
+    .brand-mark {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 0 14px var(--glow-blue), 0 0 28px var(--glow-violet);
+      flex-shrink: 0;
+    }
+    .brand-name {
+      font-size: 17px; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .brand-name span { color: var(--blue2); font-style: italic; font-family: 'Lora', serif; }
+
+    .topbar-divider {
+      width: 1px; height: 22px; background: var(--border2);
+      margin: 0 16px;
+    }
+
+    .model-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; color: var(--cyan);
+      background: rgba(34,212,232,0.08);
+      border: 1px solid rgba(34,212,232,0.18);
+      border-radius: 20px; padding: 3px 10px;
+    }
+    .model-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .topbar-spacer { flex: 1; }
+
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+    .tpl-group {
+      display: flex; align-items: center; gap: 5px;
+    }
+    .tpl-label {
+      font-size: 11px; color: var(--text3);
+      font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; margin-right: 4px;
+    }
+    .tpl-chip {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; padding: 3px 9px;
+      border-radius: 5px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tpl-chip:hover {
+      background: rgba(79,142,247,0.12);
+      border-color: rgba(79,142,247,0.35);
+      color: var(--blue2);
+    }
+    .tpl-chip.active {
+      background: rgba(79,142,247,0.15);
+      border-color: rgba(79,142,247,0.4);
+      color: var(--blue2);
+    }
+
+    /* ─── LEFT PANEL ─── */
+    #panel {
+      grid-area: panel;
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      background: rgba(13,13,26,0.6);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+
+    /* Mode tabs */
+    #tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .tab {
+      flex: 1; padding: 11px 0;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.4px;
+      border: none; background: transparent;
+      color: var(--text3); cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      font-family: 'Syne', sans-serif;
+    }
+    .tab.active { color: var(--blue2); }
+    .tab.active::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 15%; right: 15%; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--violet));
+      border-radius: 2px 2px 0 0;
+    }
+    .tab:hover:not(.active) { color: var(--text2); }
+
+    /* Prompt section */
+    #prompt-wrap {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 14px;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .prompt-label {
+      font-size: 11px; font-weight: 600;
+      color: var(--text3); letter-spacing: 0.8px;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .prompt-label::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px; border-radius: 1px;
+      background: var(--blue);
+    }
+
+    #prompt {
+      flex: 1; width: 100%; resize: none;
+      background: rgba(8,8,16,0.7);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px; font-family: 'DM Mono', monospace;
+      color: var(--text); line-height: 1.65;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+    #prompt:focus {
+      border-color: rgba(79,142,247,0.45);
+      box-shadow: 0 0 0 3px rgba(79,142,247,0.08), inset 0 0 20px rgba(79,142,247,0.03);
+    }
+    #prompt::placeholder {
+      color: var(--text3);
+      font-style: italic;
+    }
+
+    .prompt-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    #char-counter {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; color: var(--text3);
+    }
     #char-counter.warn { color: #fb923c; }
+    .kbd-hint {
+      font-size: 11px; color: var(--text3);
+      display: flex; align-items: center; gap: 3px;
+    }
+    .kbd {
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; color: var(--text2);
+    }
 
     #refine-hint {
-      font-size: 12px;
-      color: var(--text2);
-      padding: 8px 10px;
-      background: rgba(124,109,250,0.06);
-      border: 0.5px solid rgba(124,109,250,0.15);
+      font-size: 12px; color: var(--text2);
+      padding: 9px 12px;
+      background: rgba(79,142,247,0.07);
+      border: 1px solid rgba(79,142,247,0.18);
       border-radius: 8px;
-      line-height: 1.4;
+      line-height: 1.5;
       display: none;
+      font-family: 'DM Mono', monospace;
+    }
+    #refine-hint strong { color: var(--blue2); font-weight: 500; }
+
+    #error-msg {
+      font-size: 12px; color: var(--danger);
+      display: none;
+      font-family: 'DM Mono', monospace;
+      background: rgba(255,107,122,0.08);
+      border: 1px solid rgba(255,107,122,0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
     }
 
-    #error-msg { font-size: 12px; color: var(--danger); padding: 0 12px 6px; display: none; }
-
-    #bottom-bar {
-      padding: 10px 12px;
-      border-top: 0.5px solid var(--border2);
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    /* Bottom action row */
+    #actions {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 8px; align-items: center;
       flex-shrink: 0;
+      background: rgba(8,8,16,0.5);
     }
+
     #generate-btn {
-      flex: 1; padding: 9px 14px;
-      border-radius: 8px; border: none;
-      background: linear-gradient(135deg, var(--accent), #c084fc);
+      flex: 1; padding: 10px 16px;
+      border: none; border-radius: 9px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 50%, var(--violet) 100%);
       color: #fff;
-      font-size: 13px; font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.3px;
       cursor: pointer;
-      transition: opacity 0.15s, box-shadow 0.2s;
-      font-family: inherit;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      box-shadow: 0 0 16px rgba(124,109,250,0.3);
-      letter-spacing: 0.1px;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      position: relative; overflow: hidden;
+      transition: opacity 0.15s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(79,142,247,0.25), 0 0 40px rgba(155,109,255,0.15);
     }
-    #generate-btn:hover { opacity: 0.9; box-shadow: 0 0 24px rgba(124,109,250,0.45); }
-    #generate-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
-    #generate-btn .btn-icon { font-size: 15px; }
+    #generate-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    #generate-btn:hover::before { opacity: 1; }
+    #generate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(79,142,247,0.35), 0 0 50px rgba(155,109,255,0.2); }
+    #generate-btn:active { transform: translateY(0); }
+    #generate-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .icon-btn {
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 0.5px solid var(--border2);
-      background: transparent;
+    .btn-spark { font-size: 14px; }
+
+    .tool-btn {
+      width: 38px; height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
       color: var(--text2);
       cursor: pointer;
-      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
       transition: all 0.15s;
-      line-height: 1;
-    }
-    .icon-btn:hover { background: var(--surface3); color: var(--text); }
-    .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .icon-btn[title]:hover::after {
-      content: attr(title);
-      position: absolute;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #000;
-      color: #fff;
-      font-size: 11px;
-      padding: 3px 7px;
-      border-radius: 4px;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    /* ── Right panel ────────────────────────── */
-    #right { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-
-    #preview-bar {
-      padding: 8px 14px;
-      border-bottom: 0.5px solid var(--border2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface2);
+      position: relative;
       flex-shrink: 0;
     }
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-red { background: #ff5f57; }
-    .dot-yellow { background: #febc2e; }
-    .dot-green { background: #28c840; }
-    #preview-label { font-size: 12px; color: var(--text3); margin-left: 6px; flex: 1; }
-    #preview-label.live { color: #4ade80; }
-    #preview-label.live::before { content: '⬤ '; font-size: 8px; }
+    .tool-btn:hover { background: var(--surface3); color: var(--text); border-color: rgba(79,142,247,0.3); }
+    .tool-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .tool-btn[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-size: 11px; font-family: 'DM Mono', monospace;
+      padding: 4px 8px; border-radius: 5px;
+      white-space: nowrap; pointer-events: none;
+      z-index: 100;
+    }
 
-    #copy-btn {
-      font-size: 11px;
-      padding: 3px 8px;
+    /* ─── PREVIEW PANE ─── */
+    #preview {
+      grid-area: preview;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      background: var(--bg2);
+      position: relative;
+    }
+
+    #preview-topbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,16,0.7);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+    .win-btn { width: 11px; height: 11px; border-radius: 50%; }
+    .win-red { background: #ff5f57; }
+    .win-yellow { background: #febc2e; }
+    .win-green { background: #28c840; }
+
+    #url-bar {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      display: flex; align-items: center; gap: 6px;
+      margin: 0 8px;
+    }
+    .url-lock { font-size: 10px; color: var(--success); }
+    #url-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; color: var(--text3);
+      flex: 1; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+    #url-text.live { color: var(--success); }
+
+    #copy-html-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; padding: 4px 10px;
       border-radius: 5px;
-      border: 0.5px solid var(--border2);
+      border: 1px solid var(--border2);
       background: transparent;
       color: var(--text2);
       cursor: pointer;
-      font-family: inherit;
       transition: all 0.15s;
+      white-space: nowrap;
     }
-    #copy-btn:hover { background: var(--surface3); }
-    #copy-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-
-    /* Empty state */
-    #empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-    .empty-icon {
-      width: 64px; height: 64px;
-      background: var(--surface2);
-      border: 0.5px solid var(--border2);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-    .empty-title { font-size: 14px; font-weight: 500; color: var(--text2); }
-    .empty-sub { font-size: 12px; color: var(--text3); }
-
-    /* Loading */
-    #loading-overlay {
-      flex: 1;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-    .loading-ring {
-      position: relative;
-      width: 40px; height: 40px;
-    }
-    .loading-ring svg { animation: spin 1.2s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loading-text { font-size: 13px; color: var(--text2); }
-    #loading-sub { font-size: 12px; color: var(--text3); }
+    #copy-html-btn:hover { background: var(--surface3); color: var(--text); }
+    #copy-html-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
     /* Progress bar */
-    #progress-bar {
-      position: absolute;
-      top: 0; left: 0; right: 0;
+    #progress {
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), #c084fc);
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--violet));
+      background-size: 200% 100%;
       transform-origin: left;
       transform: scaleX(0);
       transition: transform 0.4s ease;
       display: none;
+      animation: shimmer 1.5s linear infinite;
+      flex-shrink: 0;
     }
+    @keyframes shimmer { 0%{background-position:0% 0%} 100%{background-position:200% 0%} }
 
-    #preview-frame { flex: 1; border: none; width: 100%; background: white; display: none; }
+    /* Empty state */
+    #empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; padding: 40px;
+    }
+    .empty-visual {
+      width: 80px; height: 80px;
+      border: 1px solid var(--border2);
+      border-radius: 18px;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px;
+      animation: floatUp 4s ease-in-out infinite;
+      position: relative;
+    }
+    .empty-visual::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: 19px;
+      background: linear-gradient(135deg, rgba(79,142,247,0.2), rgba(155,109,255,0.2));
+      z-index: -1;
+    }
+    @keyframes floatUp { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-8px) rotate(2deg)} }
+    .empty-title {
+      font-size: 16px; font-weight: 700; color: var(--text2);
+      letter-spacing: -0.3px;
+    }
+    .empty-sub {
+      font-size: 13px; color: var(--text3);
+      font-family: 'DM Mono', monospace;
+      text-align: center; max-width: 300px;
+      line-height: 1.6;
+    }
+    .empty-arrow {
+      font-size: 12px; color: var(--text3);
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'DM Mono', monospace;
+      animation: arrowPulse 2s ease-in-out infinite;
+    }
+    @keyframes arrowPulse { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-5px)} }
+
+    /* Loading state */
+    #loading {
+      flex: 1; display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 20px;
+    }
+    .spinner-ring {
+      width: 44px; height: 44px; position: relative;
+    }
+    .spinner-ring svg { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #load-msg { font-size: 13px; color: var(--text2); font-weight: 600; }
+    #load-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px; color: var(--text3);
+    }
+    .load-dots { display: inline-flex; gap: 4px; margin-left: 4px; }
+    .load-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--blue);
+      animation: dotPop 1.2s ease-in-out infinite;
+    }
+    .load-dot:nth-child(2) { animation-delay: 0.2s; }
+    .load-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPop { 0%,100%{transform:translateY(0); opacity:0.3} 50%{transform:translateY(-5px); opacity:1} }
+
+    /* Preview iframe */
+    #frame { flex: 1; border: none; width: 100%; display: none; background: #fff; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
   </style>
 </head>
 <body>
 
-  <div id="header">
-    <div class="logo-row">
-      <div class="logo-icon">⚡</div>
-      <div class="logo-text">Site<em>Forge</em></div>
-    </div>
-    <p class="tagline">Describe any website in plain English. Claude builds it live.</p>
-    <div class="badge"><div class="badge-dot"></div> Powered by Claude AI</div>
-  </div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
-  <div id="app">
-    <!-- Toolbar -->
-    <div id="toolbar">
-      <span class="toolbar-label">Templates</span>
-    <button class="tpl-btn" onclick="useTemplate('portfolio', event)">🎨 Portfolio</button>
-    <button class="tpl-btn" onclick="useTemplate('landing', event)">🚀 SaaS Landing</button>
-    <button class="tpl-btn" onclick="useTemplate('restaurant', event)">🍝 Restaurant</button>
-    <button class="tpl-btn" onclick="useTemplate('blog', event)">✍️ Blog</button>
-    <button class="tpl-btn" onclick="useTemplate('ecommerce', event)">🛍️ E-commerce</button>
-      <div class="toolbar-spacer"></div>
-      <div class="kbd-hint"><span class="kbd">⌘</span><span class="kbd">↵</span> to generate</div>
+<div id="shell">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <a class="brand" href="#">
+      <div class="brand-mark">⚡</div>
+      <div class="brand-name">Site<span>Forge</span></div>
+    </a>
+    <div class="topbar-divider"></div>
+    <div class="model-pill">
+      <div class="model-dot"></div>
+      gemini-2.0-flash
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="tpl-group">
+      <span class="tpl-label">Quick start</span>
+      <button class="tpl-chip" onclick="useTemplate('portfolio',event)">Portfolio</button>
+      <button class="tpl-chip" onclick="useTemplate('landing',event)">SaaS</button>
+      <button class="tpl-chip" onclick="useTemplate('restaurant',event)">Restaurant</button>
+      <button class="tpl-chip" onclick="useTemplate('blog',event)">Blog</button>
+      <button class="tpl-chip" onclick="useTemplate('ecommerce',event)">Shop</button>
+    </div>
+  </header>
+
+  <!-- LEFT PANEL -->
+  <aside id="panel">
+    <div id="tabs">
+      <button class="tab active" id="tab-create" onclick="setMode('create')">✦ Create</button>
+      <button class="tab" id="tab-refine" onclick="setMode('refine')">↺ Refine</button>
     </div>
 
-    <div id="main">
-      <!-- Left: prompt -->
-      <div id="left">
-        <div id="mode-bar">
-          <button class="mode-btn active" id="mode-create" onclick="setMode('create')">✦ Create</button>
-          <button class="mode-btn" id="mode-refine" onclick="setMode('refine')">↺ Refine</button>
-        </div>
-        <div id="prompt-area">
-          <textarea id="prompt" placeholder="Describe your website…&#10;&#10;e.g. A dark portfolio for a motion designer named Zara, with animated sections, a reel embed placeholder, and neon green accents." maxlength="1200" oninput="updateCounter()"></textarea>
-          <div id="char-counter">0 / 1200</div>
-          <div id="refine-hint">💡 Describe what to change — e.g. "Make the hero section taller" or "Change the color scheme to midnight blue"</div>
-        </div>
-        <div id="error-msg"></div>
-        <div id="bottom-bar">
-          <button id="generate-btn" onclick="generate()">
-            <span class="btn-icon">✦</span> <span id="btn-label">Generate</span>
-          </button>
-          <button class="icon-btn" id="copy-code-btn" onclick="copyCode()" disabled title="Copy HTML">⎘</button>
-          <button class="icon-btn" id="download-btn" onclick="downloadHTML()" disabled title="Download HTML">↓</button>
+    <div id="prompt-wrap">
+      <div class="prompt-label">Describe your website</div>
+      <textarea
+        id="prompt"
+        maxlength="1200"
+        oninput="updateCounter()"
+        placeholder="A dark brutalist portfolio for a graphic designer named Kai. Bold typography, asymmetric grid, hover glitch effects, projects in a masonry layout, monochrome palette with a single blood-orange accent…"
+      ></textarea>
+
+      <div class="prompt-meta">
+        <div id="char-counter">0 / 1200</div>
+        <div class="kbd-hint">
+          <span class="kbd">⌘</span><span class="kbd">↵</span> generate
         </div>
       </div>
 
-      <!-- Right: preview -->
-      <div id="right">
-        <div id="progress-bar"></div>
-        <div id="preview-bar">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
-          <span id="preview-label">preview</span>
-          <button id="copy-btn" onclick="copyCode()" disabled>Copy HTML</button>
-        </div>
-
-        <div id="empty-state">
-          <div class="empty-icon">🖥️</div>
-          <div class="empty-title">Your site will appear here</div>
-          <div class="empty-sub">Pick a template or write a description to start</div>
-        </div>
-
-        <div id="loading-overlay">
-          <div class="loading-ring">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="16" stroke="#222" stroke-width="3"/>
-              <path d="M20 4a16 16 0 0 1 16 16" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
-              <defs>
-                <linearGradient id="g" x1="20" y1="4" x2="36" y2="20" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#7c6dfa"/>
-                  <stop offset="1" stop-color="#c084fc"/>
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <div id="loading-text">Building your website…</div>
-          <div id="loading-sub">This usually takes 10–20 seconds</div>
-        </div>
-
-        <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+      <div id="refine-hint">
+        <strong>Refine mode —</strong> describe what to change.<br>
+        e.g. "Make the hero full-screen" · "Switch to a light theme"
       </div>
+      <div id="error-msg"></div>
     </div>
-  </div>
 
-  <script>
-    let currentHTML = '';
-    let conversationHistory = [];
-    let currentMode = 'create';
-    let activeTemplate = null;
+    <div id="actions">
+      <button id="generate-btn" onclick="generate()">
+        <span class="btn-spark">✦</span>
+        <span id="btn-label">Generate</span>
+      </button>
+      <button class="tool-btn" id="copy-code-btn" onclick="copyCode()" disabled data-tip="Copy HTML">⎘</button>
+      <button class="tool-btn" id="dl-btn" onclick="downloadHTML()" disabled data-tip="Download">↓</button>
+    </div>
+  </aside>
 
-    const templates = {
-      portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a bold tagline, a projects grid with 3 case study cards (each with a color gradient thumbnail), an about section with skills listed, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent. Add smooth scroll and hover lift effects on cards.",
-      landing: "A SaaS landing page for a tool called 'Flowmate' that helps remote teams manage async projects. Include a hero with a bold headline and two CTA buttons, a 3-feature section with icons, a testimonials row with 3 quotes, a pricing table with Free/Pro/Enterprise tiers, and a footer. Use a dark navy theme with electric purple accents and a glassmorphism card style.",
-      restaurant: "A restaurant website for 'Casa Bella', an Italian fine dining restaurant in Paris. Include a full-width cinematic hero (use a terracotta/warm gradient), a story section, a menu section with 3 categories (Antipasti, Pasta, Dolci) each with 3 items and prices, a reservation form with date/time picker, and an elegant footer. Use warm cream, terracotta, and gold palette.",
-      blog: "A personal blog for a travel writer named Maya Osei. Include a cinematic hero with her name and tagline, a 4-post featured grid with colourful placeholder thumbnails, a newsletter signup section, and a footer. Each post card should show category, reading time, and title. Use a warm editorial serif aesthetic — think Substack meets The Atlantic.",
-      ecommerce: "A fashion e-commerce store called 'Lumière' for minimalist luxury clothing. Include a full-width hero banner, a 6-product grid with hover zoom and quick-add buttons, a featured collection strip, and a newsletter bar. Each product should have a gradient placeholder image, name, and price. Use a stark white and charcoal palette with gold accents, very editorial."
-    };
+  <!-- PREVIEW PANE -->
+  <main id="preview">
+    <div id="preview-topbar">
+      <div class="win-btn win-red"></div>
+      <div class="win-btn win-yellow"></div>
+      <div class="win-btn win-green"></div>
+      <div id="url-bar">
+        <span class="url-lock">🔒</span>
+        <span id="url-text">about:blank</span>
+      </div>
+      <button id="copy-html-btn" onclick="copyCode()" disabled>Copy HTML</button>
+    </div>
 
-    function useTemplate(name , event) {
-      document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      activeTemplate = name;
-      document.getElementById('prompt').value = templates[name];
-      updateCounter();
-      setMode('create');
-    }
+    <div id="progress"></div>
 
-    function updateCounter() {
-      const len = document.getElementById('prompt').value.length;
-      const el = document.getElementById('char-counter');
-      el.textContent = `${len} / 1200`;
-      el.classList.toggle('warn', len > 1000);
-    }
+    <div id="empty">
+      <div class="empty-visual">🖥️</div>
+      <div class="empty-title">Nothing here yet</div>
+      <div class="empty-sub">Describe your website on the left and hit Generate — or pick a template above.</div>
+      <div class="empty-arrow">← start typing</div>
+    </div>
 
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById('mode-create').classList.toggle('active', mode === 'create');
-      document.getElementById('mode-refine').classList.toggle('active', mode === 'refine');
-      const refineHint = document.getElementById('refine-hint');
-      const btnLabel = document.getElementById('btn-label');
-      if (mode === 'refine') {
-        refineHint.style.display = currentHTML ? 'block' : 'none';
-        btnLabel.textContent = 'Refine';
-        document.getElementById('prompt').placeholder = 'What would you like to change?\n\ne.g. "Make the hero taller and add a particle background"';
-        if (!currentHTML) {
-          showError('Generate a site first, then use Refine mode.');
-          setMode('create');
-        }
-      } else {
-        refineHint.style.display = 'none';
-        btnLabel.textContent = 'Generate';
-        document.getElementById('prompt').placeholder = 'Describe your website…\n\ne.g. A dark portfolio for a motion designer named Zara, with animated sections, a reel embed placeholder, and neon green accents.';
+    <div id="loading">
+      <div class="spinner-ring">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="18" stroke="#1a1a35" stroke-width="3"/>
+          <path d="M22 4a18 18 0 0 1 18 18" stroke="url(#sg)" stroke-width="3" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="sg" x1="22" y1="4" x2="40" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4f8ef7"/>
+              <stop offset="0.5" stop-color="#22d4e8"/>
+              <stop offset="1" stop-color="#9b6dff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div id="load-msg">Building your website<span class="load-dots"><span class="load-dot"></span><span class="load-dot"></span><span class="load-dot"></span></span></div>
+      <div id="load-sub">Usually 10–20 seconds with Gemini</div>
+    </div>
+
+    <iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe>
+  </main>
+
+</div>
+
+<script>
+  let currentHTML = '';
+  let currentMode = 'create';
+
+  const templates = {
+    portfolio: "A sleek portfolio website for a UI/UX designer named Alex Chen. Include a hero section with a bold tagline, a projects grid with 3 case study cards (each with a color gradient thumbnail), an about section with skills listed, and a contact form. Use a clean minimal aesthetic with lots of white space and a subtle blue accent. Add smooth scroll and hover lift effects on cards.",
+    landing: "A SaaS landing page for a tool called 'Flowmate' that helps remote teams manage async projects. Include a hero with a bold headline and two CTA buttons, a 3-feature section with icons, a testimonials row with 3 quotes, a pricing table with Free/Pro/Enterprise tiers, and a footer. Use a dark navy theme with electric purple accents and a glassmorphism card style.",
+    restaurant: "A restaurant website for 'Casa Bella', an Italian fine dining restaurant in Paris. Include a full-width cinematic hero (use a terracotta/warm gradient), a story section, a menu section with 3 categories (Antipasti, Pasta, Dolci) each with 3 items and prices, a reservation form with date/time picker, and an elegant footer. Use warm cream, terracotta, and gold palette.",
+    blog: "A personal blog for a travel writer named Maya Osei. Include a cinematic hero with her name and tagline, a 4-post featured grid with colourful placeholder thumbnails, a newsletter signup section, and a footer. Each post card should show category, reading time, and title. Use a warm editorial serif aesthetic — think Substack meets The Atlantic.",
+    ecommerce: "A fashion e-commerce store called 'Lumière' for minimalist luxury clothing. Include a full-width hero banner, a 6-product grid with hover zoom and quick-add buttons, a featured collection strip, and a newsletter bar. Each product should have a gradient placeholder image, name, and price. Use a stark white and charcoal palette with gold accents, very editorial."
+  };
+
+  function useTemplate(name, event) {
+    document.querySelectorAll('.tpl-chip').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('prompt').value = templates[name];
+    updateCounter();
+    setMode('create');
+  }
+
+  function updateCounter() {
+    const len = document.getElementById('prompt').value.length;
+    const el = document.getElementById('char-counter');
+    el.textContent = `${len} / 1200`;
+    el.classList.toggle('warn', len > 1000);
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('tab-create').classList.toggle('active', mode === 'create');
+    document.getElementById('tab-refine').classList.toggle('active', mode === 'refine');
+    const refineHint = document.getElementById('refine-hint');
+    const btnLabel = document.getElementById('btn-label');
+    if (mode === 'refine') {
+      if (!currentHTML) {
+        showError('Generate a site first, then use Refine mode.');
+        setMode('create'); return;
       }
+      refineHint.style.display = 'block';
+      btnLabel.textContent = 'Refine';
+      document.getElementById('prompt').placeholder = 'What would you like to change?\n\ne.g. "Make the hero taller and add a particle background"';
+    } else {
+      refineHint.style.display = 'none';
+      btnLabel.textContent = 'Generate';
+      document.getElementById('prompt').placeholder = 'A dark brutalist portfolio for a graphic designer named Kai. Bold typography, asymmetric grid, hover glitch effects, projects in a masonry layout, monochrome palette with a single blood-orange accent…';
     }
+  }
 
-    function showError(msg) {
-      const el = document.getElementById('error-msg');
-      el.textContent = msg;
-      el.style.display = 'block';
-      setTimeout(() => { el.style.display = 'none'; }, 5000);
-    }
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
 
-    // Animated progress bar
-    let progressInterval = null;
-    function startProgress() {
-      const bar = document.getElementById('progress-bar');
-      bar.style.display = 'block';
-      let p = 0;
-      bar.style.transform = 'scaleX(0)';
-      progressInterval = setInterval(() => {
-        p = Math.min(p + Math.random() * 0.04, 0.85);
-        bar.style.transform = `scaleX(${p})`;
-      }, 400);
-    }
-    function endProgress() {
-      clearInterval(progressInterval);
-      const bar = document.getElementById('progress-bar');
-      bar.style.transform = 'scaleX(1)';
-      setTimeout(() => { bar.style.display = 'none'; bar.style.transform = 'scaleX(0)'; }, 400);
-    }
+  let progressInterval = null;
+  function startProgress() {
+    const bar = document.getElementById('progress');
+    bar.style.display = 'block';
+    let p = 0;
+    bar.style.transform = 'scaleX(0)';
+    progressInterval = setInterval(() => {
+      p = Math.min(p + Math.random() * 0.04, 0.85);
+      bar.style.transform = `scaleX(${p})`;
+    }, 400);
+  }
+  function endProgress() {
+    clearInterval(progressInterval);
+    const bar = document.getElementById('progress');
+    bar.style.transform = 'scaleX(1)';
+    setTimeout(() => { bar.style.display = 'none'; bar.style.transform = 'scaleX(0)'; }, 400);
+  }
 
-    async function generate() {
-      const promptVal = document.getElementById('prompt').value.trim();
-      if (!promptVal) { showError('Please describe your website first.'); return; }
+  async function generate() {
+    const promptVal = document.getElementById('prompt').value.trim();
+    if (!promptVal) { showError('Please describe your website first.'); return; }
 
-      const btn = document.getElementById('generate-btn');
-      const emptyState = document.getElementById('empty-state');
-      const loadingOverlay = document.getElementById('loading-overlay');
-      const frame = document.getElementById('preview-frame');
+    const btn = document.getElementById('generate-btn');
+    const empty = document.getElementById('empty');
+    const loading = document.getElementById('loading');
+    const frame = document.getElementById('frame');
 
-      btn.disabled = true;
-      emptyState.style.display = 'none';
-      frame.style.display = 'none';
-      loadingOverlay.style.display = 'flex';
-      document.getElementById('error-msg').style.display = 'none';
-      startProgress();
+    btn.disabled = true;
+    empty.style.display = 'none';
+    frame.style.display = 'none';
+    loading.style.display = 'flex';
+    document.getElementById('error-msg').style.display = 'none';
+    startProgress();
 
-      const messages = ['Building your website…', 'Writing HTML & CSS…', 'Styling components…', 'Adding interactions…', 'Almost ready…'];
-      let idx = 0;
-      const msgInterval = setInterval(() => {
-        idx = (idx + 1) % messages.length;
-        document.getElementById('loading-text').textContent = messages[idx];
-      }, 2500);
+    const loadingMessages = ['Building your website', 'Writing HTML & CSS', 'Styling components', 'Adding interactions', 'Almost ready'];
+    let idx = 0;
+    const msgInterval = setInterval(() => {
+      idx = (idx + 1) % loadingMessages.length;
+      document.getElementById('load-msg').innerHTML = loadingMessages[idx] + '<span class="load-dots"><span class="load-dot"></span><span class="load-dot"></span><span class="load-dot"></span></span>';
+    }, 2500);
 
-      const systemPrompt = `You are an elite web developer. Generate a complete, visually stunning single-file HTML website.
+    const systemPrompt = `You are an elite web developer. Generate a complete, visually stunning single-file HTML website.
 
 STRICT RULES:
 - Return ONLY raw HTML starting with <!DOCTYPE html>. Zero markdown, zero backticks, zero explanation.
@@ -547,93 +734,94 @@ STRICT RULES:
 - Use CSS custom properties for the color system.
 - Add scroll-reveal or fade-in animations using IntersectionObserver.`;
 
-      const fullPrompt = currentMode === 'create'
-        ? promptVal
-        : `Modify the existing website as follows: ${promptVal}\n\nCurrent HTML:\n${currentHTML}\n\nKeep everything else the same. Return the full updated HTML.`;
+    const fullPrompt = currentMode === 'create'
+      ? promptVal
+      : `Modify the existing website as follows: ${promptVal}\n\nCurrent HTML:\n${currentHTML}\n\nKeep everything else the same. Return the full updated HTML.`;
 
-      try {
-        const GEMINI_API_KEY = 'AQ.Ab8RN6JhRZyEv-uIisoNIUiv9tvXe4yJCoRjmXxg8jvsGGC_XQ';
+    try {
+      // ── PASTE YOUR GEMINI API KEY FROM aistudio.google.com BELOW ──
+      const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
 
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: systemPrompt + '\n\n' + fullPrompt }] }]
-            })
-          }
-        );
-
-        const data = await response.json();
-        clearInterval(msgInterval);
-        endProgress();
-
-        if (data.error) {
-          showError(data.error.message || 'API error. Check your Gemini API key.');
-          loadingOverlay.style.display = 'none';
-          emptyState.style.display = 'flex';
-          btn.disabled = false;
-          return;
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: systemPrompt + '\n\n' + fullPrompt }] }]
+          })
         }
+      );
 
-        let html = data.candidates[0].content.parts[0].text;
-       
-        html = html.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-        currentHTML = html;
+      const data = await response.json();
+      clearInterval(msgInterval);
+      endProgress();
 
-        loadingOverlay.style.display = 'none';
-        frame.style.display = 'block';
-        frame.srcdoc = html;
-
-        document.getElementById('download-btn').disabled = false;
-        document.getElementById('copy-code-btn').disabled = false;
-        document.getElementById('copy-btn').disabled = false;
-        const lbl = document.getElementById('preview-label');
-        lbl.textContent = 'live preview';
-        lbl.className = 'live';
-
-        // Switch to refine mode after first generation
-        document.getElementById('prompt').value = '';
-        updateCounter();
-        setMode('refine');
-
-      } catch (err) {
-        clearInterval(msgInterval);
-        endProgress();
-        showError('Request failed. Please try again.');
-        loadingOverlay.style.display = 'none';
-        emptyState.style.display = currentHTML ? 'none' : 'flex';
-        if (currentHTML) frame.style.display = 'block';
+      if (data.error) {
+        showError(data.error.message || 'API error. Check your Gemini API key.');
+        loading.style.display = 'none';
+        empty.style.display = 'flex';
+        btn.disabled = false;
+        return;
       }
 
-      btn.disabled = false;
+      let html = data.candidates[0].content.parts[0].text;
+      // Strip markdown fences in case Gemini adds them
+      html = html.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+      currentHTML = html;
+
+      loading.style.display = 'none';
+      frame.style.display = 'block';
+      frame.srcdoc = html;
+
+      document.getElementById('dl-btn').disabled = false;
+      document.getElementById('copy-code-btn').disabled = false;
+      document.getElementById('copy-html-btn').disabled = false;
+
+      const urlText = document.getElementById('url-text');
+      urlText.textContent = 'siteforge://live-preview';
+      urlText.className = 'live';
+
+      document.getElementById('prompt').value = '';
+      updateCounter();
+      setMode('refine');
+
+    } catch (err) {
+      clearInterval(msgInterval);
+      endProgress();
+      showError('Request failed. Please try again.');
+      loading.style.display = 'none';
+      empty.style.display = currentHTML ? 'none' : 'flex';
+      if (currentHTML) frame.style.display = 'block';
     }
 
-    function copyCode() {
-      if (!currentHTML) return;
-      navigator.clipboard.writeText(currentHTML).then(() => {
-        const btn = document.getElementById('copy-btn');
-        const orig = btn.textContent;
-        btn.textContent = '✓ Copied!';
-        setTimeout(() => { btn.textContent = orig; }, 2000);
+    btn.disabled = false;
+  }
+
+  function copyCode() {
+    if (!currentHTML) return;
+    navigator.clipboard.writeText(currentHTML).then(() => {
+      ['copy-html-btn', 'copy-code-btn'].forEach(id => {
+        const b = document.getElementById(id);
+        const orig = b.textContent;
+        b.textContent = '✓ Copied';
+        setTimeout(() => { b.textContent = orig; }, 2000);
       });
-    }
-
-    function downloadHTML() {
-      if (!currentHTML) return;
-      const blob = new Blob([currentHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'website.html';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    document.getElementById('prompt').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
     });
-  </script>
+  }
+
+  function downloadHTML() {
+    if (!currentHTML) return;
+    const blob = new Blob([currentHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'website.html'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('prompt').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
+  });
+</script>
 </body>
 </html>
