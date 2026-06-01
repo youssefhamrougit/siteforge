@@ -15,6 +15,7 @@ export default async function handler(req, res) {
   }
 
   const systemPrompt = `You are an elite web developer. Generate a complete, visually stunning single-file HTML website.
+
 STRICT RULES:
 - Return ONLY raw HTML starting with <!DOCTYPE html>. Zero markdown, zero backticks, zero explanation.
 - All CSS inside <style> in <head>. All JS inside <script> before </body>.
@@ -57,8 +58,8 @@ STRICT RULES:
     html = html.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
 
     return res.status(200).json({ html });
+
   } catch (err) {
     return res.status(500).json({ error: 'Request to Anthropic failed. Try again.' });
   }
 }
-               

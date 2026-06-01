@@ -1,6 +1,0 @@
-module.exports = {
-  rewrites: [
-    { source: "/api/(.*)", destination: "/api/$1" },
-    { source: "/(.*)", destination: "/$1" }
-  ]
-};
