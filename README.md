@@ -1,5 +1,5 @@
-
-**AI-powered website builder** that generates complete, production-ready HTML websites from a text prompt — powered by Claude.
+## still need money for api key :(
+site forge ; **AI-powered website builder** that generates complete, production-ready HTML websites from a text prompt — powered by Claude.
 
 ## What it does
 
@@ -31,6 +31,7 @@ Type a description of the website you want, hit **Generate**, and SiteForge retu
 ├── .env              # API key (never commit this)
 └── api/
     └── generate.js   # Serverless backend — calls Anthropic API
+```
 
 ## license
 
