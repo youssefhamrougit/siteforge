@@ -1,4 +1,4 @@
-## still need money for api key :(
+
 site forge ; **AI-powered website builder** that generates complete, production-ready HTML websites from a text prompt — powered by Claude.
 
 ## What it does
