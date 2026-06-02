@@ -94,7 +94,6 @@
                                                                                                                                     }, 2500);
 
                                                                                                                                         try {
-                                                                                                                                                // Call our secure backend proxy — API key never touches the browser
                                                                                                                                                       const response = await fetch('/api/generate', {
                                                                                                                                                                 method: 'POST',
                                                                                                                                                                         headers: { 'Content-Type': 'application/json' },
